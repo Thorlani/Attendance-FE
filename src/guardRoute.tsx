@@ -4,11 +4,8 @@ import { Navigate, Outlet } from "react-router-dom";
 
 
 const GuardRoute = () => {
-  const user = cookies.get("user");
-
-  console.log(user);
+  let user = localStorage.getItem("isLoggedIn")
   
-
   return user ? <Outlet /> : <Navigate to="/" />;
 };
 

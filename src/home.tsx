@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 const Home = () => {
   const navigate = useNavigate()
   const logOut = () => {
-    Cookies.remove("user")
+   localStorage.clear()
     navigate("/")
   }
   return (

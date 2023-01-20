@@ -74,7 +74,7 @@ const SignUp = () => {
         .then((res) => {
           if (res.status === 200) {
             dispatch(AuthAction(true));
-            cookies.set("user", signIn.email, { expires: 1 });
+            localStorage.setItem("isLoggedIn", 'true')
             navigate("/home");
           }
         })
@@ -105,7 +105,7 @@ const SignUp = () => {
         .then((res) => {
           if (res.status === 200) {
             dispatch(AuthAction(true));
-            cookies.set("user", signUp.email, { expires: 1 });
+            localStorage.setItem("isLoggedIn", 'true')
             navigate("/home");
           }
         })
