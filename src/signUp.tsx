@@ -67,7 +67,7 @@ const SignUp = () => {
       null;
     } else {
       axios
-        .post("http://localhost:3005/api/user/login", {
+        .post("https://attendance-be.vercel.app/api/user/login", {
           email: signIn.email,
           password: signIn.password,
         })
@@ -96,7 +96,7 @@ const SignUp = () => {
       null;
     } else {
       axios
-        .post("http://localhost:3005/api/user/register", {
+        .post("https://attendance-be.vercel.app/api/user/register", {
           firstname: signUp.firstname,
           lastname: signUp.lastname,
           email: signUp.email,
