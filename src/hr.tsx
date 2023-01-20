@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { DATA } from "./data";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 
 const HumanRight = () => {
   const navigate = useNavigate();
-  // const data = DATA;
 
   type input = {
     appearance: number;
@@ -115,7 +113,7 @@ const HumanRight = () => {
       <h1>Human Right</h1>
       {isDisplayStage === 0 ? (
         <>
-          <p>What would you live to do?</p>
+          <p>What would you like to do?</p>
           <div>
             <button type="button" onClick={() => setIsDisplayStage(2)}>
               Sign Attendance

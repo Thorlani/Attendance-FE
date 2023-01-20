@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { DATA } from "./data";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,6 @@ import "@picocss/pico";
 
 const CommercialTransaction = () => {
   const navigate = useNavigate();
-  // const data = DATA;
 
   type setDisplayStage = number;
   const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
@@ -116,7 +114,7 @@ const CommercialTransaction = () => {
       <h1>Commercial Transaction</h1>
       {isDisplayStage === 0 ? (
         <>
-          <p>What would you live to do?</p>
+          <p>What would you like to do?</p>
           <div>
             <button type="button" onClick={() => setIsDisplayStage(2)}>
               Sign Attendance

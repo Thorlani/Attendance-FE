@@ -1,13 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import { DATA } from "./data";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 
 const CriminalLaw = () => {
   const navigate = useNavigate();
-  // const data = DATA;
 
   type input = {
     appearance: number;
@@ -116,7 +114,7 @@ const CriminalLaw = () => {
       <h1>Criminal law</h1>
       {isDisplayStage === 0 ? (
         <>
-          <p>What would you live to do?</p>
+          <p>What would you like to do?</p>
           <div>
             <button type="button" onClick={() => setIsDisplayStage(2)}>
               Sign Attendance
