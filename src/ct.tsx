@@ -9,6 +9,9 @@ const CommercialTransaction = () => {
   const navigate = useNavigate();
   // const data = DATA;
 
+  type setDisplayStage = number;
+  const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
+
   type input = {
     appearance: number;
     isDisplay: boolean;
@@ -67,7 +70,8 @@ const CommercialTransaction = () => {
         imagePath: formData.imagePath,
       })
       .then((res) => {
-        console.log(res.status);
+        setIsDisplayStage(0);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -78,19 +82,20 @@ const CommercialTransaction = () => {
     data: ctAttendance,
     isLoading,
     isError,
-  } = useQuery(
-    "getting-ct-attendance",
-    () => axios.get("https://attendance-be.vercel.app/api/getCt"),
-    {
-      cacheTime: 600_000,
-      staleTime: 500_000,
-    }
+  } = useQuery("getting-ct-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/commercial")
+  );
+
+  const {
+    data: attended,
+    isLoading: attendLoading,
+    isError: attendError,
+  } = useQuery("ct-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/getCt")
   );
 
   const data = ctAttendance?.data;
-
-  type setDisplayStage = number;
-  const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
+  const totalAttend = attended?.data;
 
   return (
     <div className="container" style={{ width: "100%" }}>
@@ -103,7 +108,7 @@ const CommercialTransaction = () => {
         <ul>
           <li onClick={() => navigate("/home")}>
             <a href="#" role="button">
-              Back
+              Back to home page
             </a>
           </li>
         </ul>
@@ -189,8 +194,12 @@ const CommercialTransaction = () => {
                           <td>{item?.matric}</td>
                           <td>{item?.name}</td>
                           <td>
-                            {
-                              data.filter(
+                            {attendError === true ? (
+                              <p>Error</p>
+                            ) : attendLoading === true ? (
+                              <p>loading</p>
+                            ) : (
+                              totalAttend.filter(
                                 (obj: {
                                   matric: string;
                                   name: string;
@@ -199,21 +208,27 @@ const CommercialTransaction = () => {
                                   return obj.matric === item.matric;
                                 }
                               ).length
-                            }
+                            )}
                           </td>
                           {totalAppearance.isDisplay && (
                             <td>
-                              {(data.filter(
-                                (obj: {
-                                  matric: string;
-                                  name: string;
-                                  date: string;
-                                }) => {
-                                  return obj.matric === item.matric;
-                                }
-                              ).length /
-                                totalAppearance.appearance) *
-                                100}
+                              {attendError === true ? (
+                                <p>Error</p>
+                              ) : attendLoading === true ? (
+                                <p>loading</p>
+                              ) : (
+                                (totalAttend.filter(
+                                  (obj: {
+                                    matric: string;
+                                    name: string;
+                                    date: string;
+                                  }) => {
+                                    return obj.matric === item.matric;
+                                  }
+                                ).length /
+                                  totalAppearance.appearance) *
+                                100
+                              )}
                             </td>
                           )}
                         </tr>

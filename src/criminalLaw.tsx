@@ -61,13 +61,14 @@ const CriminalLaw = () => {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3005/api/postCl", {
+      .post("https://attendance-be.vercel.app/api/postCl", {
         matric: formData.matric,
         name: formData.name,
         imagePath: formData.imagePath,
       })
       .then((res) => {
-        console.log(res.status);
+        setIsDisplayStage(0);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -78,16 +79,20 @@ const CriminalLaw = () => {
     data: ctAttendance,
     isLoading,
     isError,
-  } = useQuery(
-    "getting-ct-attendance",
-    () => axios.get("https://attendance-be.vercel.app/api/getCl"),
-    {
-      cacheTime: 600_000,
-      staleTime: 500_000,
-    }
+  } = useQuery("getting-cl-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/criminal")
+  );
+
+  const {
+    data: attended,
+    isLoading: attendLoading,
+    isError: attendError,
+  } = useQuery("cl-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/getCl")
   );
 
   const data = ctAttendance?.data;
+  const totalAttend = attended?.data;
 
   type setDisplayStage = number;
   const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
@@ -103,7 +108,7 @@ const CriminalLaw = () => {
         <ul>
           <li onClick={() => navigate("/home")}>
             <a href="#" role="button">
-              Back
+              Back to home page
             </a>
           </li>
         </ul>
@@ -122,14 +127,28 @@ const CriminalLaw = () => {
           </div>
         </>
       ) : isDisplayStage === 1 ? (
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <p>List of Attendance</p>
-          <a href="#" role={"banner"} style={{marginLeft: "15px"}} onClick={() => setIsDisplayStage(0)}>go back</a>
+          <a
+            href="#"
+            role={"banner"}
+            style={{ marginLeft: "15px" }}
+            onClick={() => setIsDisplayStage(0)}
+          >
+            go back
+          </a>
         </div>
       ) : (
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <p>Sign your Attendance</p>
-          <a href="#" role={"banner"} style={{marginLeft: "15px"}} onClick={() => setIsDisplayStage(0)}>go back</a>
+          <a
+            href="#"
+            role={"banner"}
+            style={{ marginLeft: "15px" }}
+            onClick={() => setIsDisplayStage(0)}
+          >
+            go back
+          </a>
         </div>
       )}
       {isDisplayStage === 1 && (
@@ -175,8 +194,12 @@ const CriminalLaw = () => {
                           <td>{item?.matric}</td>
                           <td>{item?.name}</td>
                           <td>
-                            {
-                              data.filter(
+                            {attendError === true ? (
+                              <p>Error</p>
+                            ) : attendLoading === true ? (
+                              <p>loading</p>
+                            ) : (
+                              totalAttend.filter(
                                 (obj: {
                                   matric: string;
                                   name: string;
@@ -185,21 +208,27 @@ const CriminalLaw = () => {
                                   return obj.matric === item.matric;
                                 }
                               ).length
-                            }
+                            )}
                           </td>
                           {totalAppearance.isDisplay && (
                             <td>
-                              {(data.filter(
-                                (obj: {
-                                  matric: string;
-                                  name: string;
-                                  date: string;
-                                }) => {
-                                  return obj.matric === item.matric;
-                                }
-                              ).length /
-                                totalAppearance.appearance) *
-                                100}
+                              {attendError === true ? (
+                                <p>Error</p>
+                              ) : attendLoading === true ? (
+                                <p>loading</p>
+                              ) : (
+                                (totalAttend.filter(
+                                  (obj: {
+                                    matric: string;
+                                    name: string;
+                                    date: string;
+                                  }) => {
+                                    return obj.matric === item.matric;
+                                  }
+                                ).length /
+                                  totalAppearance.appearance) *
+                                100
+                              )}
                             </td>
                           )}
                         </tr>

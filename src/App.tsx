@@ -11,12 +11,14 @@ import CriminalLaw from "./criminalLaw";
 import LawOfTort from "./tort";
 import HumanRight from "./hr";
 import "@picocss/pico";
+import Register from "./register";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SignUp />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<GuardRoute />}>
           <Route path="/home" element={<Home />} />
           <Route path="/ct" element={<CommercialTransaction />} />

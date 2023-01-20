@@ -117,6 +117,13 @@ const SignUp = () => {
 
   return (
     <div className="container">
+      <nav>
+        <ul>
+          <li>
+            <strong>Lani's App</strong>
+          </li>
+        </ul>
+      </nav>
       {stage === true && (
         <form>
           <h1>Sign In</h1>

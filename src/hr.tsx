@@ -60,13 +60,14 @@ const HumanRight = () => {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3005/api/postHr", {
+      .post("https://attendance-be.vercel.app/api/postHr", {
         matric: formData.matric,
         name: formData.name,
         imagePath: formData.imagePath,
       })
       .then((res) => {
-        console.log(res.status);
+        setIsDisplayStage(0);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -77,16 +78,20 @@ const HumanRight = () => {
     data: ctAttendance,
     isLoading,
     isError,
-  } = useQuery(
-    "getting-ct-attendance",
-    () => axios.get("https://attendance-be.vercel.app/api/getHr"),
-    {
-      cacheTime: 600_000,
-      staleTime: 500_000,
-    }
+  } = useQuery("getting-hr-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/human")
+  );
+
+  const {
+    data: attended,
+    isLoading: attendLoading,
+    isError: attendError,
+  } = useQuery("hr-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/getHr")
   );
 
   const data = ctAttendance?.data;
+  const totalAttend = attended?.data;
 
   type setDisplayStage = number;
   const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
@@ -102,7 +107,7 @@ const HumanRight = () => {
         <ul>
           <li onClick={() => navigate("/home")}>
             <a href="#" role="button">
-              Back
+              Back to home page
             </a>
           </li>
         </ul>
@@ -188,8 +193,12 @@ const HumanRight = () => {
                           <td>{item?.matric}</td>
                           <td>{item?.name}</td>
                           <td>
-                            {
-                              data.filter(
+                            {attendError === true ? (
+                              <p>Error</p>
+                            ) : attendLoading === true ? (
+                              <p>loading</p>
+                            ) : (
+                              totalAttend.filter(
                                 (obj: {
                                   matric: string;
                                   name: string;
@@ -198,21 +207,27 @@ const HumanRight = () => {
                                   return obj.matric === item.matric;
                                 }
                               ).length
-                            }
+                            )}
                           </td>
                           {totalAppearance.isDisplay && (
                             <td>
-                              {(data.filter(
-                                (obj: {
-                                  matric: string;
-                                  name: string;
-                                  date: string;
-                                }) => {
-                                  return obj.matric === item.matric;
-                                }
-                              ).length /
-                                totalAppearance.appearance) *
-                                100}
+                              {attendError === true ? (
+                                <p>Error</p>
+                              ) : attendLoading === true ? (
+                                <p>loading</p>
+                              ) : (
+                                (totalAttend.filter(
+                                  (obj: {
+                                    matric: string;
+                                    name: string;
+                                    date: string;
+                                  }) => {
+                                    return obj.matric === item.matric;
+                                  }
+                                ).length /
+                                  totalAppearance.appearance) *
+                                100
+                              )}
                             </td>
                           )}
                         </tr>

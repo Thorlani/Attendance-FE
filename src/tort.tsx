@@ -60,13 +60,14 @@ const LawOfTort = () => {
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3005/api/postLt", {
+      .post("https://attendance-be.vercel.app/api/postLt", {
         matric: formData.matric,
         name: formData.name,
         imagePath: formData.imagePath,
       })
       .then((res) => {
-        console.log(res.status);
+        setIsDisplayStage(0);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -77,16 +78,20 @@ const LawOfTort = () => {
     data: ctAttendance,
     isLoading,
     isError,
-  } = useQuery(
-    "getting-ct-attendance",
-    () => axios.get("https://attendance-be.vercel.app/api/getLt"),
-    {
-      cacheTime: 600_000,
-      staleTime: 500_000,
-    }
+  } = useQuery("getting-lt-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/tort")
+  );
+
+  const {
+    data: attended,
+    isLoading: attendLoading,
+    isError: attendError,
+  } = useQuery("lt-attendance", () =>
+    axios.get("https://attendance-be.vercel.app/api/getLt")
   );
 
   const data = ctAttendance?.data;
+  const totalAttend = attended?.data;
 
   type setDisplayStage = number;
   const [isDisplayStage, setIsDisplayStage] = useState<setDisplayStage>(0);
@@ -121,14 +126,28 @@ const LawOfTort = () => {
           </div>
         </>
       ) : isDisplayStage === 1 ? (
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <p>List of Attendance</p>
-          <a href="#" role={"banner"} style={{marginLeft: "15px"}} onClick={() => setIsDisplayStage(0)}>go back</a>
+          <a
+            href="#"
+            role={"banner"}
+            style={{ marginLeft: "15px" }}
+            onClick={() => setIsDisplayStage(0)}
+          >
+            go back
+          </a>
         </div>
       ) : (
-        <div style={{display: "flex"}}>
+        <div style={{ display: "flex" }}>
           <p>Sign your Attendance</p>
-          <a href="#" role={"banner"} style={{marginLeft: "15px"}} onClick={() => setIsDisplayStage(0)}>go back</a>
+          <a
+            href="#"
+            role={"banner"}
+            style={{ marginLeft: "15px" }}
+            onClick={() => setIsDisplayStage(0)}
+          >
+            go back
+          </a>
         </div>
       )}
       {isDisplayStage === 1 && (
@@ -174,8 +193,12 @@ const LawOfTort = () => {
                           <td>{item?.matric}</td>
                           <td>{item?.name}</td>
                           <td>
-                            {
-                              data.filter(
+                            {attendError === true ? (
+                              <p>Error</p>
+                            ) : attendLoading === true ? (
+                              <p>loading</p>
+                            ) : (
+                              totalAttend.filter(
                                 (obj: {
                                   matric: string;
                                   name: string;
@@ -184,21 +207,27 @@ const LawOfTort = () => {
                                   return obj.matric === item.matric;
                                 }
                               ).length
-                            }
+                            )}
                           </td>
                           {totalAppearance.isDisplay && (
                             <td>
-                              {(data.filter(
-                                (obj: {
-                                  matric: string;
-                                  name: string;
-                                  date: string;
-                                }) => {
-                                  return obj.matric === item.matric;
-                                }
-                              ).length /
-                                totalAppearance.appearance) *
-                                100}
+                              {attendError === true ? (
+                                <p>Error</p>
+                              ) : attendLoading === true ? (
+                                <p>loading</p>
+                              ) : (
+                                (totalAttend.filter(
+                                  (obj: {
+                                    matric: string;
+                                    name: string;
+                                    date: string;
+                                  }) => {
+                                    return obj.matric === item.matric;
+                                  }
+                                ).length /
+                                  totalAppearance.appearance) *
+                                100
+                              )}
                             </td>
                           )}
                         </tr>
