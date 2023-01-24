@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+declare module "react" {
+  interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
+    // extends React's HTMLAttributes
+    filename?: string;
+  }
+}
+
 const Register = () => {
   type setStage = number;
   const [currentPage, setCurrentPage] = useState<setStage>(0);
   type formData = {
     matric: string;
     name: string;
+    image?: any;
   };
   const [form, setForm] = useState<formData>({
     matric: "",
     name: "",
   });
+
+  const [filename, setFilename] = useState("");
 
   const handleChange = (event: {
     target: { name: any; value: any; type: any; checked: any };
@@ -25,6 +35,10 @@ const Register = () => {
     });
   };
 
+  const onChangeFile = (event: any) => {
+    setFilename(event.target.files[0]);
+  };
+
   type loader = boolean;
   const [isLoading, setIsLoading] = useState<loader>(false);
 
@@ -34,14 +48,18 @@ const Register = () => {
   const handleSubmitOne = (event: { preventDefault: () => void }) => {
     setIsLoading(true);
     event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("matric", form.matric);
+    formData.append("name", form.name);
+    formData.append("Image", filename);
+
     if (form.matric === "" || form.name === "") {
       null;
     } else {
       axios
-        .post("https://attendance-be.vercel.app/api/criminal", {
-          matric: form.matric,
-          name: form.name,
-        })
+        .post("https://attendance-be.vercel.app/api/criminal", formData)
         .then((res) => {
           setIsLoading(false);
           setCurrentPage(0);
@@ -55,15 +73,20 @@ const Register = () => {
     }
   };
   const handleSubmitTwo = (event: { preventDefault: () => void }) => {
+    setIsLoading(true);
     event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("matric", form.matric);
+    formData.append("name", form.name);
+    formData.append("Image", filename);
+
     if (form.matric === "" || form.name === "") {
       null;
     } else {
       axios
-        .post("https://attendance-be.vercel.app/api/commercial", {
-          matric: form.matric,
-          name: form.name,
-        })
+        .post("https://attendance-be.vercel.app/api/commercial", formData)
         .then((res) => {
           setIsLoading(false);
           setCurrentPage(0);
@@ -77,15 +100,20 @@ const Register = () => {
     }
   };
   const handleSubmitThree = (event: { preventDefault: () => void }) => {
+    setIsLoading(true);
     event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("matric", form.matric);
+    formData.append("name", form.name);
+    formData.append("Image", filename);
+
     if (form.matric === "" || form.name === "") {
       null;
     } else {
       axios
-        .post("https://attendance-be.vercel.app/api/tort", {
-          matric: form.matric,
-          name: form.name,
-        })
+        .post("https://attendance-be.vercel.app/api/tort", formData)
         .then((res) => {
           setIsLoading(false);
           setCurrentPage(0);
@@ -99,15 +127,20 @@ const Register = () => {
     }
   };
   const handleSubmitFour = (event: { preventDefault: () => void }) => {
+    setIsLoading(true);
     event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("matric", form.matric);
+    formData.append("name", form.name);
+    formData.append("Image", filename);
+
     if (form.matric === "" || form.name === "") {
       null;
     } else {
       axios
-        .post("https://attendance-be.vercel.app/api/intellectual", {
-          matric: form.matric,
-          name: form.name,
-        })
+        .post("https://attendance-be.vercel.app/api/intellectual", formData)
         .then((res) => {
           setIsLoading(false);
           setCurrentPage(0);
@@ -121,15 +154,20 @@ const Register = () => {
     }
   };
   const handleSubmitFive = (event: { preventDefault: () => void }) => {
+    setIsLoading(true);
     event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("matric", form.matric);
+    formData.append("name", form.name);
+    formData.append("Image", filename);
+
     if (form.matric === "" || form.name === "") {
       null;
     } else {
       axios
-        .post("https://attendance-be.vercel.app/api/human", {
-          matric: form.matric,
-          name: form.name,
-        })
+        .post("https://attendance-be.vercel.app/api/human", formData)
         .then((res) => {
           setIsLoading(false);
           setCurrentPage(0);
@@ -227,6 +265,15 @@ const Register = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label htmlFor="image">Photo</label>
+                    <input
+                      type="file"
+                      filename="Image"
+                      value={form.image}
+                      onChange={onChangeFile}
+                    />
+                  </div>
                   {errorMessage !== "" && (
                     <div>
                       <p style={{ color: "red" }}>{errorMessage + "!"}</p>
@@ -279,6 +326,15 @@ const Register = () => {
                       value={form.name}
                       onChange={handleChange}
                       required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="image">Photo</label>
+                    <input
+                      type="file"
+                      filename="Image"
+                      value={form.image}
+                      onChange={onChangeFile}
                     />
                   </div>
                   {errorMessage !== "" && (
@@ -335,6 +391,15 @@ const Register = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label htmlFor="image">Photo</label>
+                    <input
+                      type="file"
+                      filename="Image"
+                      value={form.image}
+                      onChange={onChangeFile}
+                    />
+                  </div>
                   {errorMessage !== "" && (
                     <div>
                       <p style={{ color: "red" }}>{errorMessage + "!"}</p>
@@ -389,6 +454,15 @@ const Register = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label htmlFor="image">Photo</label>
+                    <input
+                      type="file"
+                      filename="Image"
+                      value={form.image}
+                      onChange={onChangeFile}
+                    />
+                  </div>
                   {errorMessage !== "" && (
                     <div>
                       <p style={{ color: "red" }}>{errorMessage + "!"}</p>
@@ -441,6 +515,15 @@ const Register = () => {
                       value={form.name}
                       onChange={handleChange}
                       required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="image">Photo</label>
+                    <input
+                      type="file"
+                      filename="Image"
+                      value={form.image}
+                      onChange={onChangeFile}
                     />
                   </div>
                   {errorMessage !== "" && (

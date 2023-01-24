@@ -1,28 +1,16 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import Navbar from "./component/navbar";
 
 const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const logOut = () => {
-   localStorage.clear()
-    navigate("/")
-  }
+    localStorage.clear();
+    navigate("/");
+  };
   return (
     <div className="container">
-      <nav>
-        <ul>
-          <li>
-            <strong>Lani's App</strong>
-          </li>
-        </ul>
-        <ul>
-          <li onClick={logOut}>
-            <a href="#" role="button">
-              Log Out
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Navbar function={logOut} content={"Log Out"} />
       <h1>Home</h1>
       <p>list of courses available</p>
       <ul>
