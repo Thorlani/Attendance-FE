@@ -5,7 +5,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 
 const HrProfile = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const home = () => {
@@ -13,7 +13,7 @@ const HrProfile = () => {
   };
 
   const { data, isLoading, isError } = useQuery("hr-profile", () =>
-    axios.get(`https://attendance-be.vercel.app/api/Human/${id}`)
+    axios.get(`https://attendance-be.vercel.app/api/human/${id}`)
   );
 
   const { data: listOfCl } = useQuery("hr", () =>
@@ -29,11 +29,28 @@ const HrProfile = () => {
   };
 
   const details: profileDetails = data?.data;
+
+  let mee: any[] = [];
+
+  let x = allAttendance?.map((item: any) => {
+    if (item?.matric === details?.matric) {
+      mee.push(item);
+    }
+  });
+
+  let trimString = function (str: string, length: number) {
+    return str.length > length ? str.substring(0, length) : str;
+  };
+
   return (
     <div className="container">
       <Navbar function={home} content={"Back to home page"} />
       <h1>Hello {details?.name}</h1>
-      <img src={`${details?.imagePath}`} alt="profile photo" />
+      <img
+        src={`${details?.imagePath}`}
+        alt="profile photo"
+        style={{ width: "150px", height: "150px", objectFit: "contain" }}
+      />
       <p>list of human right classes attended</p>
       <figure>
         <table>
@@ -44,7 +61,17 @@ const HrProfile = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>{}</tbody>
+          <tbody>
+            {mee.map((item: any) => {
+              return (
+                <tr>
+                  <td>{item?.matric}</td>
+                  <td>{item?.name}</td>
+                  <td>{trimString(item?.date, 10)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </figure>
     </div>
