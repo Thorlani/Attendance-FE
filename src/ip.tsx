@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Navbar from "./component/navbar";
@@ -204,6 +204,7 @@ const IntellectualProperty = () => {
                       <tbody style={{ textAlign: "center" }}>
                         {data.map(
                           (item: {
+                            _id: string;
                             imagePath: any;
                             matric: string;
                             name: string;
@@ -219,8 +220,16 @@ const IntellectualProperty = () => {
                                     style={{ objectFit: "contain" }}
                                   />
                                 </td>
-                                <td>{item?.matric}</td>
-                                <td>{item?.name}</td>
+                                <td>
+                                  <Link to={`/ip/profile/${item._id}`}>
+                                    {item?.matric}
+                                  </Link>
+                                </td>
+                                <td>
+                                  <Link to={`/ip/profile/${item._id}`}>
+                                    {item?.name}
+                                  </Link>
+                                </td>
                                 <td>
                                   {attendError === true ? (
                                     <p>Error</p>

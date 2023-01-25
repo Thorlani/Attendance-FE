@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Navbar from "./component/navbar";
@@ -202,37 +202,41 @@ const HumanRight = () => {
                         </tr>
                       </thead>
                       <tbody style={{ textAlign: "center" }}>
-                        {data.map((item: { imagePath: any, matric: string; name: string }) => {
-                          return (
-                            <tr>
-                              <td><img src={item?.imagePath} alt="student photo" width={50} height={50} style={{objectFit: "contain"}} /></td>
-                              <td>{item?.matric}</td>
-                              <td>{item?.name}</td>
-                              <td>
-                                {attendError === true ? (
-                                  <p>Error</p>
-                                ) : attendLoading === true ? (
-                                  <p>loading</p>
-                                ) : (
-                                  totalAttend.filter(
-                                    (obj: {
-                                      matric: string;
-                                      name: string;
-                                      date: string;
-                                    }) => {
-                                      return obj.matric === item.matric;
-                                    }
-                                  ).length
-                                )}
-                              </td>
-                              {totalAppearance.isDisplay && (
+                        {data.map(
+                          (item: {
+                            _id: string;
+                            imagePath: any;
+                            matric: string;
+                            name: string;
+                          }) => {
+                            return (
+                              <tr>
+                                <td>
+                                  <img
+                                    src={item?.imagePath}
+                                    alt="student photo"
+                                    width={50}
+                                    height={50}
+                                    style={{ objectFit: "contain" }}
+                                  />
+                                </td>
+                                <td>
+                                  <Link to={`/hr/profile/${item._id}`}>
+                                    {item?.matric}
+                                  </Link>
+                                </td>
+                                <td>
+                                  <Link to={`/hr/profile/${item._id}`}>
+                                    {item?.name}
+                                  </Link>
+                                </td>
                                 <td>
                                   {attendError === true ? (
                                     <p>Error</p>
                                   ) : attendLoading === true ? (
                                     <p>loading</p>
                                   ) : (
-                                    (totalAttend.filter(
+                                    totalAttend.filter(
                                       (obj: {
                                         matric: string;
                                         name: string;
@@ -240,15 +244,34 @@ const HumanRight = () => {
                                       }) => {
                                         return obj.matric === item.matric;
                                       }
-                                    ).length /
-                                      totalAppearance.appearance) *
-                                    100
+                                    ).length
                                   )}
                                 </td>
-                              )}
-                            </tr>
-                          );
-                        })}
+                                {totalAppearance.isDisplay && (
+                                  <td>
+                                    {attendError === true ? (
+                                      <p>Error</p>
+                                    ) : attendLoading === true ? (
+                                      <p>loading</p>
+                                    ) : (
+                                      (totalAttend.filter(
+                                        (obj: {
+                                          matric: string;
+                                          name: string;
+                                          date: string;
+                                        }) => {
+                                          return obj.matric === item.matric;
+                                        }
+                                      ).length /
+                                        totalAppearance.appearance) *
+                                      100
+                                    )}
+                                  </td>
+                                )}
+                              </tr>
+                            );
+                          }
+                        )}
                       </tbody>
                     </table>
                   </figure>
