@@ -89,7 +89,7 @@ const HumanRight = () => {
     formDatas.append("name", formData.name);
     formDatas.append("Image", filename);
     axios
-      .post("https://attendance-be.vercel.app/api/postLt", formDatas)
+      .post("https://attendance-be.vercel.app/api/postHr", formDatas)
       .then((res) => {
         setLoading(false);
         setFormData({ ...formData, matric: "", name: "" });

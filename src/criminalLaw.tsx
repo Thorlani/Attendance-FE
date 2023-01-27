@@ -90,7 +90,7 @@ const CriminalLaw = () => {
     formDatas.append("name", formData.name);
     formDatas.append("Image", filename);
     axios
-      .post("https://attendance-be.vercel.app/api/postLt", formDatas)
+      .post("https://attendance-be.vercel.app/api/postCl", formDatas)
       .then((res) => {
         setLoading(false);
         setFormData({ ...formData, matric: "", name: "" });

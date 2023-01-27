@@ -65,6 +65,7 @@ const SignUp = () => {
 
   type loader = boolean;
   const [isLoading, setIsLoading] = useState<loader>(false);
+  const [wrongDetails, setWrongDetails] = useState<loader>(true) 
 
   const handleSubmitOne = () => {
     setIsLoading(true);
@@ -85,11 +86,10 @@ const SignUp = () => {
         })
         .catch(() => {
           setIsLoading(false);
+          setWrongDetails(false)
         });
     }
   };
-
-  const wrongDetails = useSelector((state: any) => state.auth.parameter);
 
   const handleSubmitTwo = () => {
     setIsLoading(true);
@@ -117,6 +117,7 @@ const SignUp = () => {
         })
         .catch(() => {
           setIsLoading(false);
+          setWrongDetails(false)
         });
     }
   };
