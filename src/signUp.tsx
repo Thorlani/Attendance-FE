@@ -79,14 +79,12 @@ const SignUp = () => {
         .then((res) => {
           if (res.status === 200) {
             setIsLoading(false);
-            dispatch(AuthAction(true));
             localStorage.setItem("isLoggedIn", "true");
             navigate("/home");
           }
         })
         .catch(() => {
           setIsLoading(false);
-          dispatch(AuthAction(false));
         });
     }
   };
@@ -113,14 +111,12 @@ const SignUp = () => {
         .then((res) => {
           if (res.status === 200) {
             setIsLoading(false);
-            dispatch(AuthAction(true));
             localStorage.setItem("isLoggedIn", "true");
             navigate("/home");
           }
         })
         .catch(() => {
           setIsLoading(false);
-          dispatch(AuthAction(false));
         });
     }
   };
