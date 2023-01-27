@@ -1,8 +1,15 @@
-import { AuthType } from "./AuthType";
+import { AuthType, IncreaseType } from "./AuthType";
 
-export const AuthAction = (parameter = false) => {
+export const AuthAction = (qty = 1) => {
   return {
     type: AuthType,
-    payload: parameter,
+    payload: qty,
+  };
+};
+
+export const RedoAction = (qty = 0) => {
+  return {
+    type: IncreaseType,
+    payload: qty,
   };
 };

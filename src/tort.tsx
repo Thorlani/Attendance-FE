@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
 import Navbar from "./component/navbar";
+import { useSelector, useDispatch } from "react-redux";
+import { AuthAction, RedoAction } from "./redux/AuthAction";
 
 declare module "react" {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
@@ -12,6 +14,9 @@ declare module "react" {
 }
 
 const LawOfTort = () => {
+  const parameter = useSelector((state: any) => state.auth.parameter);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   type loader = boolean;
@@ -86,10 +91,14 @@ const LawOfTort = () => {
     axios
       .post("https://attendance-be.vercel.app/api/postLt", formDatas)
       .then((res) => {
+        setLoading(false);
+        setFormData({ ...formData, matric: "", name: "" });
+        setFilename("");
         setIsDisplayStage(0);
-        window.location.reload();
+        dispatch(AuthAction());
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -148,10 +157,39 @@ const LawOfTort = () => {
     }
   };
 
+  type pass = string;
+  const [attendancePass, setAttendancePass] = useState<pass>("");
+  const match: string = "lawFaculty123";
+
   return (
     <div className="container" style={{ width: "100%" }}>
-      <Navbar function={home} content={"Back to home page"} />
-      {Loading === true ? (
+      <Navbar
+        function={parameter === 5 ? null : home}
+        content={"Back to home page"}
+      />
+      {parameter === 10 ? (
+        <div>
+          <h2>10 people already signed attendance</h2>
+          <p>Authorize to make others sign attendance</p>
+          <div>
+            <input
+              type="text"
+              name="redo"
+              value={attendancePass}
+              onChange={(e) => setAttendancePass(e.target.value)}
+            />
+            <a
+              href="#"
+              role="button"
+              onClick={() => {
+                if (attendancePass === match) dispatch(RedoAction());
+              }}
+            >
+              Authorize
+            </a>
+          </div>
+        </div>
+      ) : Loading === true ? (
         <p>Submitting Attendance</p>
       ) : (
         <>
@@ -278,7 +316,7 @@ const LawOfTort = () => {
                                 name: string;
                               }) => {
                                 return (
-                                  <tr>
+                                  <tr key={item?._id}>
                                     <td>
                                       <img
                                         src={item?.imagePath}
@@ -373,7 +411,7 @@ const LawOfTort = () => {
                               name: string;
                             }) => {
                               return (
-                                <tr>
+                                <tr key={item?._id}>
                                   <td>
                                     <img
                                       src={item?.imagePath}
