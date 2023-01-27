@@ -90,12 +90,16 @@ const CriminalLaw = () => {
     formDatas.append("name", formData.name);
     formDatas.append("Image", filename);
     axios
-      .post("https://attendance-be.vercel.app/api/postCl", formDatas)
+      .post("https://attendance-be.vercel.app/api/postLt", formDatas)
       .then((res) => {
+        setLoading(false);
+        setFormData({ ...formData, matric: "", name: "" });
+        setFilename("");
         setIsDisplayStage(0);
-        window.location.reload();
+        dispatch(AuthAction());
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -425,12 +429,16 @@ const CriminalLaw = () => {
                                     />
                                   </td>
                                   <td>
-                                    <Link to={`/criminalLaw/profile/${item._id}`}>
+                                    <Link
+                                      to={`/criminalLaw/profile/${item._id}`}
+                                    >
                                       {item?.matric}
                                     </Link>
                                   </td>
                                   <td>
-                                    <Link to={`/criminalLaw/profile/${item._id}`}>
+                                    <Link
+                                      to={`/criminalLaw/profile/${item._id}`}
+                                    >
                                       {item?.name}
                                     </Link>
                                   </td>

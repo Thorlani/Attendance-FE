@@ -90,12 +90,16 @@ const CommercialTransaction = () => {
     formDatas.append("name", formData.name);
     formDatas.append("Image", filename);
     axios
-      .post("https://attendance-be.vercel.app/api/postCt", formDatas)
+      .post("https://attendance-be.vercel.app/api/postLt", formDatas)
       .then((res) => {
+        setLoading(false);
+        setFormData({ ...formData, matric: "", name: "" });
+        setFilename("");
         setIsDisplayStage(0);
-        window.location.reload();
+        dispatch(AuthAction());
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
