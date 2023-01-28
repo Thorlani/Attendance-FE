@@ -167,7 +167,7 @@ const CriminalLaw = () => {
   return (
     <div className="container" style={{ width: "100%" }}>
       <Navbar
-        function={parameter === 5 ? null : home}
+        function={parameter === 10 ? null : home}
         content={"Back to home page"}
       />
       {parameter === 10 ? (
