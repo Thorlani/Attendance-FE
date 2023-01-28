@@ -166,13 +166,13 @@ const IntellectualProperty = () => {
   return (
     <div className="container" style={{ width: "100%" }}>
       <Navbar
-        function={parameter === 10 ? null : home}
+        function={parameter >= 10 ? null : home}
         content={"Back to home page"}
       />
-      {parameter === 10 ? (
+      {parameter >= 10 ? (
         <div>
-          <h2>10 people already signed attendance</h2>
-          <p>Authorize to make others sign attendance</p>
+          <h2>Start signing attendance</h2>
+          <p>Authorize to make students sign attendance</p>
           <div>
             <input
               type="text"
