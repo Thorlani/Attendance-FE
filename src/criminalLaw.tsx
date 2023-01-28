@@ -176,7 +176,7 @@ const CriminalLaw = () => {
           <p>Authorize to make students sign attendance</p>
           <div>
             <input
-              type="text"
+              type="password"
               name="redo"
               value={attendancePass}
               onChange={(e) => setAttendancePass(e.target.value)}
@@ -185,7 +185,10 @@ const CriminalLaw = () => {
               href="#"
               role="button"
               onClick={() => {
-                if (attendancePass === match) dispatch(RedoAction());
+                if (attendancePass === match) {
+                  dispatch(RedoAction())
+                  setAttendancePass("")
+                };
               }}
             >
               Authorize
