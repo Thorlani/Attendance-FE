@@ -1,4 +1,4 @@
-import { AuthType, IncreaseType } from "./AuthType";
+import { AuthType, IncreaseType, DecreaseType } from "./AuthType";
 
 export const AuthAction = (qty = 1) => {
   return {
@@ -10,6 +10,13 @@ export const AuthAction = (qty = 1) => {
 export const RedoAction = (qty = 0) => {
   return {
     type: IncreaseType,
+    payload: qty,
+  };
+};
+
+export const DestAction = (qty = 0) => {
+  return {
+    type: DecreaseType,
     payload: qty,
   };
 };

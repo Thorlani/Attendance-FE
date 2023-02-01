@@ -4,7 +4,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import Navbar from "./component/navbar";
 import { useSelector, useDispatch } from "react-redux";
-import { AuthAction, RedoAction } from "./redux/AuthAction";
+import { AuthAction, DestAction, RedoAction } from "./redux/AuthAction";
 
 declare module "react" {
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
@@ -15,6 +15,7 @@ declare module "react" {
 
 const LawOfTort = () => {
   const parameter = useSelector((state: any) => state.auth.parameter);
+  const destination = useSelector((state: any) => state.auth.destination);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -157,35 +158,70 @@ const LawOfTort = () => {
     }
   };
 
-  type pass = string;
-  const [attendancePass, setAttendancePass] = useState<pass>("");
+  type pass = {
+    count: number;
+    password: string;
+  };
+  const [attendancePass, setAttendancePass] = useState<pass>({
+    count: 0,
+    password: "",
+  });
+
+  const authoRizer = (event: {
+    target: { name: any; value: any; type: any; checked: any };
+  }) => {
+    const { name, value, type, checked } = event.target;
+    setAttendancePass((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
+  };
+
   const match: string = "lawFaculty123";
+
+  type passCode = boolean;
+  const [wrongPasscode, setWrongPasscode] = useState<passCode>(false);
 
   return (
     <div className="container" style={{ width: "100%" }}>
       <Navbar
-        function={parameter >= 10 ? null : home}
+        function={parameter >= destination ? null : home}
         content={"Back to home page"}
       />
-      {parameter >= 10 ? (
+      {parameter >= destination ? (
         <div>
           <h2>Start signing attendance</h2>
           <p>Authorize to make students sign attendance</p>
           <div>
             <input
-              type="password"
-              name="redo"
-              value={attendancePass}
-              onChange={(e) => setAttendancePass(e.target.value)}
+              type="number"
+              value={attendancePass.count}
+              name="count"
+              onChange={authoRizer}
             />
+            <input
+              type="password"
+              name="password"
+              value={attendancePass.password}
+              onChange={authoRizer}
+            />
+            {wrongPasscode === true && (
+              <p style={{ color: "red" }}>Wrong Passcode</p>
+            )}
             <a
               href="#"
               role="button"
               onClick={() => {
-                if (attendancePass === match) {
-                  dispatch(RedoAction())
-                  setAttendancePass("")
-                };
+                if (attendancePass.password === match) {
+                  setWrongPasscode(false);
+                  dispatch(RedoAction());
+                  dispatch(DestAction(Number(attendancePass.count)));
+                  setAttendancePass({ ...attendancePass, password: "" });
+                } else {
+                  setWrongPasscode(true);
+                }
               }}
             >
               Authorize

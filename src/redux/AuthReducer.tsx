@@ -1,8 +1,9 @@
 import { actions } from "react-table";
-import { AuthType, IncreaseType } from "./AuthType";
+import { AuthType, DecreaseType, IncreaseType } from "./AuthType";
 
 const initialState = {
   parameter: 11,
+  destination: 11,
 };
 
 export const Auth = (state = initialState, action: any) => {
@@ -15,7 +16,12 @@ export const Auth = (state = initialState, action: any) => {
     case IncreaseType:
       return {
         ...state,
-        parameter: action.payload,
+        parameter: state.parameter + action.payload,
+      };
+    case DecreaseType:
+      return {
+        ...state,
+        destination: action.payload,
       };
     default:
       return state;
