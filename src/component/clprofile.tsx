@@ -56,6 +56,7 @@ const ClProfile = () => {
         <table>
           <thead>
             <tr style={{ width: "100%", textAlign: "center" }}>
+              <th>Photo</th>
               <th>Matric No</th>
               <th>Name</th>
               <th>Date</th>
@@ -65,6 +66,15 @@ const ClProfile = () => {
             {mee.map((item: any) => {
               return (
                 <tr>
+                  <td>
+                    <img
+                      src={item?.imagePath}
+                      alt="Student's photo"
+                      width={80}
+                      height={80}
+                      style={{ objectFit: "contain" }}
+                    />
+                  </td>
                   <td>{item?.matric}</td>
                   <td>{item?.name}</td>
                   <td>{trimString(item?.date, 10)}</td>

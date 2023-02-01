@@ -195,12 +195,14 @@ const HumanRight = () => {
           <h2>Start signing attendance</h2>
           <p>Authorize to make students sign attendance</p>
           <div>
+          <label htmlFor="Number">Number of student to sign</label>
             <input
               type="number"
               value={attendancePass.count}
               name="count"
               onChange={authoRizer}
             />
+            <label htmlFor="passcode">Passcode</label>
             <input
               type="password"
               name="password"
