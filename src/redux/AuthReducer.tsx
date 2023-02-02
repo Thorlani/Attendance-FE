@@ -2,8 +2,8 @@ import { actions } from "react-table";
 import { AuthType, DecreaseType, IncreaseType } from "./AuthType";
 
 const initialState = {
-  parameter: 11,
-  destination: 11,
+  parameter: 1,
+  destination: 0,
 };
 
 export const Auth = (state = initialState, action: any) => {
