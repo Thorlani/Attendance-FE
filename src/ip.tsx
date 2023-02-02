@@ -184,8 +184,14 @@ const IntellectualProperty = () => {
 
   const match: string = "lawFaculty123";
 
-  type passCode = boolean;
-  const [wrongPasscode, setWrongPasscode] = useState<passCode>(false);
+  type passCode = {
+    first: boolean;
+    second: boolean;
+  };
+  const [wrongPasscode, setWrongPasscode] = useState<passCode>({
+    first: false,
+    second: false,
+  });
 
   return (
     <div className="container" style={{ width: "100%" }}>
@@ -205,27 +211,36 @@ const IntellectualProperty = () => {
               name="count"
               onChange={authoRizer}
             />
+            {wrongPasscode.second === true && (
+              <p style={{ color: "red" }}>
+                Number of students to sign attendance must be greater than one
+              </p>
+            )}
             <label htmlFor="passcode">Passcode</label>
             <input
               type="password"
               name="password"
               value={attendancePass.password}
               onChange={authoRizer}
+              required
             />
-            {wrongPasscode === true && (
-              <p style={{ color: "red" }}>Wrong Passcode</p>
+            {wrongPasscode.first === true && (
+              <p style={{ color: "red" }}>Invalid Passcode</p>
             )}
             <a
               href="#"
               role="button"
               onClick={() => {
                 if (attendancePass.password === match) {
-                  setWrongPasscode(false);
+                  setWrongPasscode({ ...wrongPasscode, first: false });
                   dispatch(RedoAction());
                   dispatch(DestAction(Number(attendancePass.count)));
                   setAttendancePass({ ...attendancePass, password: "" });
+                } else if (attendancePass.count <= 1) {
+                  setWrongPasscode({ ...wrongPasscode, second: true });
                 } else {
-                  setWrongPasscode(true);
+                  setWrongPasscode({ ...wrongPasscode, first: true });
+                  setWrongPasscode({ ...wrongPasscode, second: false });
                 }
               }}
             >
